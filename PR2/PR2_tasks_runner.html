@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ПР2 — Запуск задач 1–23 (JavaScript)</title>
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --card: #111827;
+            --muted: #9ca3af;
+            --text: #e5e7eb;
+            --accent: #6366f1;
+            --accent-2: #22d3ee;
+            --btn: #1f2937;
+            --btn-hover: #374151;
+            --ok: #10b981;
+            --warn: #f59e0b;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            background: radial-gradient(1200px 800px at 20% 0%, rgba(34,211,238,.08), transparent 50%),
+            radial-gradient(1200px 800px at 100% 0%, rgba(99,102,241,.07), transparent 50%),
+            var(--bg);
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.55;
+        }
+        .wrap { max-width: 1100px; margin: 32px auto; padding: 0 16px 48px; }
+        header { display: grid; gap: 10px; align-items: start; grid-template-columns: 1fr auto; }
+        h1 {
+            margin: 0; font-weight: 800; letter-spacing: -0.02em; font-size: clamp(24px, 3vw, 34px);
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .subtitle { color: var(--muted); margin-top: 4px; }
+        .panel {
+            margin-top: 18px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            border-radius: 18px;
+            padding: 18px;
+        }
+        .grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+        button {
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.06);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            color: var(--text); padding: 12px 14px; border-radius: 14px; font-weight: 600;
+            transition: transform .08s ease, background .2s ease, border-color .2s ease; text-align: left;
+        }
+        button:hover { transform: translateY(-1px); background: var(--btn-hover); border-color: rgba(255,255,255,0.12); }
+        button small { display: block; font-weight: 500; color: var(--muted); margin-top: 2px; }
+        .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: flex-end; }
+        .row > button { text-align: center; min-width: 160px; }
+        .ok { border-color: rgba(16,185,129,.3); }
+        .warn { border-color: rgba(245,158,11,.35); }
+        .muted { color: var(--muted); }
+        pre#output {
+            margin: 0; width: 100%; height: 280px; overflow: auto; padding: 14px; border-radius: 14px;
+            border: 1px dashed rgba(255,255,255,0.12);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)), #0c1220;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 13.5px; line-height: 1.5; white-space: pre-wrap;
+        }
+        .footnote { color: var(--muted); font-size: 13px; margin-top: 10px; }
+        .kbd { display: inline-block; padding: 1px 7px; border-radius: 6px; background: #111827; border: 1px solid rgba(255,255,255,.12); font-size: 12px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <div>
+            <h1>Практика №2 — запуск задач 1–23</h1>
+            <div class="subtitle">Удобные кнопки для проверки. Вывод <span class="kbd">console.log</span> отображается ниже.</div>
+        </div>
+        <div class="row">
+            <button class="ok" onclick="clearOutput(); logLine('Вывод очищен.');">Очистить вывод</button>
+            <button class="warn" onclick="toggleAutoScroll(this)">Автопрокрутка: вкл</button>
+        </div>
+    </header>
+
+    <section class="panel" style="margin-top:22px">
+        <div class="grid">
+            <button onclick="runTask(1)">Задача 1 — Переменные<small>console.log</small></button>
+            <button onclick="runTask(2)">Задача 2 — Переменные<small>console.log</small></button>
+            <button onclick="runTask(3)">Задача 3 — Переменные<small>console.log</small></button>
+            <button onclick="runTask(4)">Задача 4 — Конкатенация<small>console.log</small></button>
+            <button onclick="runTask(5)">Задача 5 — Типы данных<small>typeof</small></button>
+            <button onclick="runTask(6)">Задача 6 — Типы данных<small>typeof</small></button>
+            <button onclick="runTask(7)">Задача 7 — Типы данных<small>typeof</small></button>
+            <button onclick="runTask(8)">Задача 8 — Типы данных<small>typeof</small></button>
+            <button onclick="runTask(9)">Задача 9 — Типы данных<small>typeof</small></button>
+            <button onclick="runTask(10)">Задача 10 — Диалоги<small>prompt → alert</small></button>
+            <button onclick="runTask(11)">Задача 11 — Диалоги<small>prompt → alert</small></button>
+            <button onclick="runTask(12)">Задача 12 — Диалоги<small>confirm → alert</small></button>
+            <button onclick="runTask(13)">Задача 13 — Диалоги<small>prompt → alert</small></button>
+            <button onclick="runTask(14)">Задача 14 — Преобразование<small>Number + 1000</small></button>
+            <button onclick="runTask(15)">Задача 15 — Преобразование<small>'Skibidi' × n</small></button>
+            <button onclick="runTask(16)">Задача 16 — Преобразование<small>Number + 1</small></button>
+            <button onclick="runTask(17)">Задача 17 — Преобразование<small>Number + 10</small></button>
+            <button onclick="runTask(18)">Задача 18 — Преобразование<small>Number + 420</small></button>
+            <button onclick="runTask(19)">Задача 19 — Арифметика<small>+=</small></button>
+            <button onclick="runTask(20)">Задача 20 — Арифметика<small>+ и *</small></button>
+            <button onclick="runTask(21)">Задача 21 — Арифметика<small>-=</small></button>
+            <button onclick="runTask(22)">Задача 22 — Арифметика<small>-</small></button>
+            <button onclick="runTask(23)">Задача 23 — Арифметика<small>/ и %</small></button>
+        </div>
+        <p class="footnote">
+            Задачи 10–18 используют <span class="kbd">prompt/confirm/alert</span>, поэтому появятся диалоговые окна.
+        </p>
+    </section>
+
+    <section class="panel" style="margin-top:22px">
+        <h3 style="margin: 8px 0 12px;">Панель вывода (console)</h3>
+        <pre id="output" aria-live="polite"></pre>
+        <div class="footnote">Вывод дублируется сюда для удобства проверки.</div>
+    </section>
+
+    <section class="panel" style="margin-top:22px">
+        <details>
+            <summary><strong>Как пользоваться</strong></summary>
+            <ol>
+                <li>Сохрани этот файл как <b>PR2_tasks_runner.html</b> и открой в браузере.</li>
+                <li>Жми кнопки «Задача 1–23». В заданиях с диалогами вводи значения.</li>
+                <li>Смотри результат в панели вывода или в консоли (<span class="kbd">F12</span>).</li>
+            </ol>
+        </details>
+    </section>
+</div>
+
+<script>
+    // === Вспомогательная панель вывода ===
+    const outEl = () => document.getElementById('output');
+    let autoScroll = true;
+
+    function logLine(msg = '') {
+        const el = outEl();
+        el.textContent += (msg + '\\n');
+        if (autoScroll) el.scrollTop = el.scrollHeight;
+    }
+    function clearOutput() { outEl().textContent = ''; }
+
+    function toggleAutoScroll(btn) {
+        autoScroll = !autoScroll;
+        btn.textContent = 'Автопрокрутка: ' + (autoScroll ? 'вкл' : 'выкл');
+    }
+
+    // Дублируем console.log в панель вывода
+    (function patchConsole(){
+        const nativeLog = console.log.bind(console);
+        console.log = (...args) => {
+            nativeLog(...args);
+            try {
+                const line = args.map(x =>
+                    typeof x === 'string' ? x :
+                        (typeof x === 'object' ? JSON.stringify(x) : String(x))
+                ).join(' ');
+                logLine(line);
+            } catch(e) {
+                logLine('[log error]');
+            }
+        };
+    })();
+
+    // === Реализации задач 1–23 ===
+
+    function task01() {
+        const songName = "I'm a barbie girl 🎶";
+        console.log("Now playing: " + songName);
+    }
+    function task02() {
+        const catMood = "angry 😾";
+        console.log("Your cat is " + catMood);
+    }
+    function task03() {
+        const isImpostor = true;
+        console.log("Red is impostor? " + isImpostor);
+    }
+    function task04() {
+        const wow = "wow";
+        const soJS = "so JavaScript";
+        const muchCode = "much code";
+        console.log(wow + " " + soJS + " " + muchCode);
+    }
+    function task05() {
+        const likes = 77;
+        const verified = false;
+        console.log(typeof likes, typeof verified);
+    }
+    function task06() {
+        const isOnion = true;
+        console.log(typeof isOnion);
+    }
+    function task07() {
+        const year = 2077;
+        const hero = "V";
+        const isBuggy = true;
+        console.log(typeof year, typeof hero, typeof isBuggy);
+    }
+    function task08() {
+        const prize = 1000000;
+        console.log(typeof prize);
+    }
+    function task09() {
+        const situation = "fire";
+        const reaction = "this is fine";
+        console.log(typeof situation, typeof reaction);
+    }
+    function task10() {
+        const nickname = prompt("What’s your Minecraft nickname?");
+        if (nickname === null) return;
+        alert("Welcome to the server, " + nickname + " ⛏️");
+        console.log("User nickname:", nickname);
+    }
+    function task11() {
+        const show = prompt("What’s your favorite TV show?");
+        if (show === null) return;
+        alert("Tonight we binge: " + show + " 🍿");
+        console.log("Favorite show:", show);
+    }
+    function task12() {
+        const ok = confirm("Do you want a link to cool JS docs?");
+        if (ok) {
+            alert("Never gonna give you up 🎵");
+            console.log("User agreed: true");
+        } else {
+            console.log("User agreed: false");
+        }
+    }
+    function task13() {
+        const hours = prompt("How many hours did you scroll today?");
+        if (hours === null) return;
+        alert("Bruh, that's " + hours + " hours... touch grass 🌱");
+        console.log("Scroll hours:", hours);
+    }
+    function task14() {
+        const btcStr = prompt("Enter Bitcoin price:");
+        if (btcStr === null) return;
+        const btc = Number(btcStr);
+        alert(btc + 1000);
+        console.log("BTC input:", btcStr, "→", btc, "; +1000 =", btc + 1000);
+    }
+    function task15() {
+        const nStr = prompt("Enter n (неотрицательное число):");
+        if (nStr === null) return;
+        const n = Number(nStr);
+        if (Number.isFinite(n) && n >= 0) {
+            const out = ("Skibidi ".repeat(n)).trim();
+            alert(out);
+            console.log("n =", n, "→", out);
+        } else {
+            alert("n должно быть неотрицательным числом");
+            console.log("Некорректное n:", nStr);
+        }
+    }
+    function task16() {
+        const cStr = prompt("How many coffees today?");
+        if (cStr === null) return;
+        const c = Number(cStr);
+        alert(c + 1);
+        console.log("Coffee input:", cStr, "→", c, "; +1 =", c + 1);
+    }
+    function task17() {
+        const karmaStr = prompt("Enter karma:");
+        if (karmaStr === null) return;
+        const karma = Number(karmaStr);
+        alert("Total karma: " + (karma + 10));
+        console.log("Karma input:", karmaStr, "→", karma, "; +10 =", karma + 10);
+    }
+    function task18() {
+        const likesStr = prompt("How many likes did your post get?");
+        if (likesStr === null) return;
+        const likes = Number(likesStr);
+        alert(likes + 420);
+        console.log("Likes input:", likesStr, "→", likes, "; +420 =", likes + 420);
+    }
+    function task19() {
+        let money = 1000;
+        money += 250;
+        console.log(money);
+    }
+    function task20() {
+        const coins = 350;
+        const boosters = 5;
+        console.log("Total score: " + (coins + boosters * 100));
+    }
+    function task21() {
+        let pikachuHP = 100;
+        const attack = 35;
+        pikachuHP -= attack;
+        console.log(pikachuHP);
+    }
+    function task22() {
+        const players = 456;
+        const eliminated = 100;
+        const remaining = players - eliminated;
+        console.log(remaining);
+    }
+    function task23() {
+        const a = 10;
+        const b = 3;
+        console.log("a / b =", a / b);
+        console.log("a % b =", a % b);
+    }
+
+    // Универсальный запуск по номеру
+    function runTask(n) {
+        const name = ('task' + String(n).padStart(2, '0'));
+        if (typeof window[name] === 'function') {
+            logLine('▶ Запуск ' + name + '()');
+            try {
+                window[name]();
+            } catch (e) {
+                console.log('Ошибка:', e && (e.message || e));
+            }
+        } else {
+            console.log('Функция не найдена:', name);
+        }
+    }
+</script>
+</body>
+</html>
