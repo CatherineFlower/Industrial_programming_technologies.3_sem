@@ -1,0 +1,54 @@
+<!-- Петренко Екатерина Анатольевна ЭФБО-04-24 -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>КР1 — 1(6), 2(44), 3(31), 4(17)</title>
+    <style>
+        body { font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 24px; }
+        h1 { margin: 0 0 8px; }
+        .muted { color:#6a737d }
+        .btns { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:16px 0; }
+        button { cursor:pointer; padding:10px 14px; border-radius:10px; border:1px solid #d0d7de; background:#fff; }
+        button:hover { background:#f6f8fa; }
+        pre { border:1px dashed #d0d7de; border-radius:10px; padding:12px; background:#fafbfc; white-space:pre-wrap; }
+    </style>
+</head>
+<body>
+<h1>Контрольная работа №1 — запуск решений</h1>
+<div class="muted">Ваши варианты: 1-6, 2-44, 3-31, 4-17. Ввод — через <code>prompt</code>, вывод — в <code>alert</code> и логах ниже.</div>
+
+<div class="btns">
+    <button onclick="run1()">Задание №1 (вариант 6): сумма цифр</button>
+    <button onclick="run2()">Задание №2 (вариант 44): делители числа</button>
+    <button onclick="run3()">Задание №3 (вариант 31): мин. чётный элемент массива</button>
+    <button onclick="run4()">Задание №4 (вариант 17): квадрат в диапазоне [-5;5]</button>
+    <button onclick="runAll()">Запустить все по порядку</button>
+    <button onclick="out.textContent=''">Очистить вывод</button>
+</div>
+
+<pre id="out"></pre>
+
+<script>
+    const out = document.getElementById('out');
+    (function patchConsole(){
+        const native = console.log.bind(console);
+        console.log = (...args) => {
+            native(...args);
+            try { out.textContent += args.map(a => typeof a==='string'?a:JSON.stringify(a)).join(' ') + '\n'; }
+            catch { out.textContent += '[log error]\n'; }
+        };
+    })();
+
+    // Запустить все
+    function runAll(){ run1(); run2(); run3(); run4(); }
+</script>
+
+<!-- Подключаем решения -->
+<script src="1.js"></script>
+<script src="2.js"></script>
+<script src="3.js"></script>
+<script src="4.js"></script>
+</body>
+</html>

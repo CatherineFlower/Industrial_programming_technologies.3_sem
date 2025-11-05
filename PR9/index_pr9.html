@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>ПР-9 — Колбэки, промисы, цепочки</title>
+    <style>
+        :root{--bg:#0b1220;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--border:#1f2a44}
+        *{box-sizing:border-box}
+        body{margin:24px;font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--text);
+            background:radial-gradient(1000px 700px at 10% -10%, rgba(96,165,250,.12), transparent 50%),var(--bg)}
+        h1{margin:0 0 14px} h2{margin:18px 0 10px}
+        section{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+            border:1px solid var(--border);border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+        .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+        button{cursor:pointer;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0e1730;color:var(--text)}
+        button:hover{background:#152043}
+        pre.out{white-space:pre-wrap;background:#0b1426;border:1px dashed var(--border);border-radius:12px;padding:10px;min-height:48px}
+        small.note{color:var(--muted)}
+        /* Из методички: стили круга */
+        .circle-area{
+            position: relative;                /* круг будет абсолютным внутри этой области */
+            height: 260px;                     /* видимая зона рядом с заданием */
+            margin-top: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            background: #0b1426;
+        }
+        .circle{
+            position:absolute;width:0;height:0;border-radius:50%;background:red;
+            transition:width 2s,height 2s;left:50%;top:50%;transform:translate(-50%,-50%);
+        }
+        .circle.grow{width:200px;height:200px}
+        .message-ball{background:yellow;color:#000;padding:10px;border-radius:10px;text-align:center;font-weight:bold}
+        #log{margin-top:6px;font-family:monospace;line-height:1.5}
+    </style>
+</head>
+<body>
+<h1>Практическая №9 — асинхронщина без боли</h1>
+<small class="note">Нажимай кнопки — результат появится под каждой задачей. Некоторые задания показывают alert по условиям методички.</small>
+
+<!-- 1.1 -->
+<section>
+    <h2>1.1 Имитация загрузки файла (колбэк)</h2>
+    <div class="row">
+        <button onclick="demo11()">loadFile('config.json')</button>
+        <button onclick="clearOut('out11')">Очистить вывод</button>
+    </div>
+    <pre id="out11" class="out"></pre>
+</section>
+
+<!-- 1.2 -->
+<section>
+    <h2>1.2 Последовательность колбэков (адская пирамида)</h2>
+    <div class="row">
+        <button onclick="demo12()">user → settings → data</button>
+        <button onclick="clearOut('out12')">Очистить вывод</button>
+    </div>
+    <pre id="out12" class="out"></pre>
+</section>
+
+<!-- 1.3 -->
+<section>
+    <h2>1.3 Уходим от пирамиды (плоские шаги)</h2>
+    <div class="row">
+        <button onclick="demo13()">user → settings → data (flat)</button>
+        <button onclick="clearOut('out13')">Очистить вывод</button>
+    </div>
+    <pre id="out13" class="out"></pre>
+</section>
+
+<!-- 1.4 -->
+<section>
+    <h2>1.4* Параллельная загрузка</h2>
+    <div class="row">
+        <button onclick="demo14()">parallelLoad(['a.json','b.json','c.json'])</button>
+        <button onclick="clearOut('out14')">Очистить вывод</button>
+    </div>
+    <pre id="out14" class="out"></pre>
+</section>
+
+<!-- 2.1 -->
+<section>
+    <h2>2.1 Промис с задержкой и 50/50</h2>
+    <div class="row">
+        <button onclick="demo21()">Создать и обработать</button>
+        <button onclick="clearOut('out21')">Очистить вывод</button>
+    </div>
+    <pre id="out21" class="out"></pre>
+</section>
+
+<!-- 2.2 -->
+<section>
+    <h2>2.2 Можно ли «перевыполнить» промис?</h2>
+    <div class="row">
+        <button onclick="demo22()">Показать поведение</button>
+        <button onclick="clearOut('out22')">Очистить вывод</button>
+    </div>
+    <pre id="out22" class="out"></pre>
+</section>
+
+<!-- 2.3 -->
+<section>
+    <h2>2.3 delay(ms)</h2>
+    <div class="row">
+        <button onclick="demo23()">delay(2000)</button>
+        <button onclick="clearOut('out23')">Очистить вывод</button>
+    </div>
+    <pre id="out23" class="out"></pre>
+</section>
+
+<!-- 2.4 -->
+<section>
+    <h2>2.4 loadFile → промисы</h2>
+    <div class="row">
+        <button onclick="demo24()">loadFilePromise('user.json')</button>
+        <button onclick="clearOut('out24')">Очистить вывод</button>
+    </div>
+    <pre id="out24" class="out"></pre>
+</section>
+
+<!-- 3.1 -->
+<section>
+    <h2>3.1 Цепочка: 1 → 2 → 4</h2>
+    <div class="row">
+        <button onclick="demo31()">Запустить цепочку</button>
+        <button onclick="clearOut('out31')">Очистить вывод</button>
+    </div>
+    <pre id="out31" class="out"></pre>
+</section>
+
+<!-- 3.2 -->
+<section>
+    <h2>3.2 Последовательная загрузка через промисы</h2>
+    <div class="row">
+        <button onclick="demo32()">user → settings → data</button>
+        <button onclick="clearOut('out32')">Очистить вывод</button>
+    </div>
+    <pre id="out32" class="out"></pre>
+</section>
+
+<!-- 3.3 -->
+<!-- 3.3 -->
+<section>
+    <h2>3.3 Анимация круга (Promise)</h2>
+    <div class="row">
+        <button onclick="demo33()">showCircle(200,200,100)</button>
+        <button onclick="clearOut('out33')">Очистить вывод</button>
+    </div>
+
+    <!-- Площадка для анимации круга -->
+    <div id="circleArea" class="circle-area"></div>
+
+    <pre id="out33" class="out"></pre>
+</section>
+
+<!-- 4.1 -->
+<section>
+    <h2>4.1 Переписать askPassword на промисы</h2>
+    <div class="row">
+        <button onclick="demo41()">askPasswordP()</button>
+        <button onclick="clearOut('out41')">Очистить вывод</button>
+    </div>
+    <pre id="out41" class="out"></pre>
+</section>
+
+<!-- 4.2 -->
+<section>
+    <h2>4.2 promisify(f)</h2>
+    <div class="row">
+        <button onclick="demo42()">promisify(loadFile)</button>
+        <button onclick="clearOut('out42')">Очистить вывод</button>
+    </div>
+    <pre id="out42" class="out"></pre>
+</section>
+
+<!-- 4.3 -->
+<section>
+    <h2>4.3 4 файла: пирамида vs цепочка</h2>
+    <div class="row">
+        <button onclick="demo43_pyramid()">Пирамида</button>
+        <button onclick="demo43_promises()">Цепочка</button>
+        <button onclick="clearOut('out43')">Очистить вывод</button>
+    </div>
+    <pre id="out43" class="out"></pre>
+</section>
+
+<script src="pr9_all.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ПР5 — DOM (задания 1–7)</title>
+
+    <!-- Можно хранить стили тут, без отдельного .css -->
+    <style>
+        :root{
+            --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e5e7eb;
+            --border:#1f2a44; --accent:#60a5fa; --accent-2:#22d3ee; --ok:#10b981; --warn:#f59e0b;
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:24px; font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; color:var(--text);
+            background:
+                    radial-gradient(1200px 800px at 10% -10%, rgba(96,165,250,.12), transparent 50%),
+                    radial-gradient(900px 700px at 100% 0%, rgba(34,211,238,.10), transparent 40%),
+                    var(--bg);
+        }
+        h1{margin:0 0 12px; letter-spacing:-.02em}
+        h2{margin:26px 0 10px}
+        section{
+            background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+            border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:18px;
+            box-shadow:0 10px 30px rgba(0,0,0,.35);
+        }
+        .row{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0}
+        button{
+            cursor:pointer; padding:10px 14px; border-radius:12px; border:1px solid var(--border);
+            background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+            color:var(--text); font-weight:600;
+            transition:transform .08s ease, background .2s ease, border-color .2s ease;
+        }
+        button:hover{transform:translateY(-1px); border-color:#2b3a5e; background:rgba(255,255,255,.08)}
+        input[type="text"]{
+            background:#0b1426; color:var(--text); border:1px solid var(--border); border-radius:10px;
+            padding:8px 10px; outline:none;
+        }
+        input[type="text"]:focus{border-color:#2b3a5e; box-shadow:0 0 0 3px rgba(96,165,250,.15)}
+        table{border-collapse:collapse; background:#0b1426; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+        td{padding:8px 10px; border:1px solid var(--border)}
+        pre.out{white-space:pre-wrap; background:#0b1426; border:1px dashed var(--border); border-radius:12px; padding:10px; min-height:48px; margin-top:8px}
+        .highlight{outline:2px solid var(--warn); background:#201600}
+        #task5-container{padding:10px}
+        #task5-container p{margin:4px 0; padding:2px 6px}
+        #task6 .item{padding:6px 10px; border:1px solid var(--border); border-radius:10px; background:#0b1426}
+        hr{border:none; border-top:1px solid var(--border); margin:12px 0}
+        label{color:var(--muted)}
+    </style>
+</head>
+<body>
+<h1>Практическая работа №5 — DOM (задания 1–7)</h1>
+
+<!-- Задание 1 -->
+<section id="task1">
+    <h2>Задание 1 — навигация по DOM</h2>
+    <div>Пользователи:</div>
+    <ul>
+        <li>Джон</li>
+        <li>Пит</li>
+    </ul>
+    <div class="row">
+        <button type="button" onclick="task1_run()">Выполнить задание 1</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-1')">Очистить вывод</button>
+    </div>
+    <pre id="out-1" class="out"></pre>
+</section>
+
+<!-- Задание 2 -->
+<section id="task2">
+    <h2>Задание 2 — обратная диагональ в таблице</h2>
+    <table border="1" id="testTable">
+        <tr><td>(0,0)</td><td>(0,1)</td><td>(0,2)</td></tr>
+        <tr><td>(1,0)</td><td>(1,1)</td><td>(1,2)</td></tr>
+        <tr><td>(2,0)</td><td>(2,1)</td><td>(2,2)</td></tr>
+    </table>
+    <div class="row">
+        <button type="button" onclick="task2_run()">Подсветить обратную диагональ</button>
+        <button type="button" onclick="task2_reset()">Сбросить цвета</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-2')">Очистить вывод</button>
+    </div>
+    <pre id="out-2" class="out"></pre>
+</section>
+
+<!-- Задание 3 -->
+<section id="task3">
+    <h2>Задание 3 — поиск элементов</h2>
+
+    <form name="search">
+        <label>Search the site:
+            <input type="text" name="search">
+        </label>
+        <button class="primary" type="submit">Search!</button>
+    </form>
+
+    <hr>
+
+    <form name="search-person">
+        Search the visitors:
+        <table id="age-table">
+            <tr>
+                <td>Age:</td>
+                <td id="age-list">
+                    <label><input type="radio" name="age" value="young">less than 18</label>
+                    <label><input type="radio" name="age" value="mature">18-50</label>
+                    <label><input type="radio" name="age" value="senior">more than 50</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Additionally:</td>
+                <td>
+                    <input type="text" name="info[0]">
+                    <input type="text" name="info[1]">
+                    <input type="text" name="info[2]">
+                </td>
+            </tr>
+        </table>
+        <button class="primary" type="submit">Search!</button>
+    </form>
+
+    <div class="row">
+        <button type="button" onclick="task3_run()">Найти и вывести элементы</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-3')">Очистить вывод</button>
+    </div>
+    <pre id="out-3" class="out"></pre>
+</section>
+
+<!-- Задание 4 -->
+<section id="task4">
+    <h2>Задание 4 — динамическое создание элементов</h2>
+    <div id="container4"></div>
+    <div class="row">
+        <button type="button" onclick="task4_build()">Построить список и кнопку</button>
+        <button type="button" onclick="task4_add()">Добавить «Новый пользователь»</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-4')">Очистить вывод</button>
+    </div>
+    <pre id="out-4" class="out"></pre>
+</section>
+
+<!-- Задание 5 -->
+<section id="task5">
+    <h2>Задание 5 — классы и стили</h2>
+    <div id="task5-container">
+        <p class="text">Первый параграф</p>
+        <p class="text special">Второй параграф</p>
+        <p class="text">Третий параграф</p>
+        <p class="text">Четвертый параграф</p>
+        <p class="text">Пятый параграф</p>
+        <p class="text">Шестой параграф</p>
+    </div>
+    <div class="row">
+        <button type="button" onclick="task5_run()">Применить правила</button>
+        <button type="button" onclick="task5_reset()">Сбросить стили</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-5')">Очистить вывод</button>
+    </div>
+    <pre id="out-5" class="out"></pre>
+</section>
+
+<!-- Задание 6 -->
+<section id="task6">
+    <h2>Задание 6 — работа с data-атрибутами</h2>
+    <div class="item" data-price="100">Товар 1</div>
+    <div class="item active" data-price="200">Товар 2</div>
+    <div class="item" data-price="150">Товар 3</div>
+    <div class="row">
+        <button type="button" onclick="task6_run()">Выполнить расчёты</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-6')">Очистить вывод</button>
+    </div>
+    <pre id="out-6" class="out"></pre>
+</section>
+
+<!-- Задание 7* -->
+<section id="task7">
+    <h2>Задание 7* — findDomPath / findElementByPath</h2>
+    <div id="app">
+        <header>
+            <nav>
+                <ul class="menu">
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#" class="active" id="activeLink">О нас</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="content">
+                <div class="card">
+                    <h2>Заголовок</h2>
+                    <p class="text" id="paragraph">Текст параграфа</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div id="externalElement">Внешний элемент</div>
+
+    <div class="row">
+        <button type="button" onclick="task7_demo()">Показать примеры путей</button>
+    </div>
+    <div class="row">
+        <button type="button" onclick="clearOut('out-7')">Очистить вывод</button>
+    </div>
+    <pre id="out-7" class="out"></pre>
+</section>
+
+<!-- Подключаем единый JS с решениями -->
+<script src="PR5_01.10.js"></script>
+</body>
+</html>

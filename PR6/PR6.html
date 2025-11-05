@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>ПР-6 — DOM: стили, размеры, прокрутка</title>
+    <style>
+        :root{--bg:#0b1220;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--border:#1f2a44;--warn:#f59e0b;--ok:#10b981}
+        *{box-sizing:border-box}
+        body{margin:24px;font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--text);
+            background:radial-gradient(1000px 700px at 10% -10%, rgba(96,165,250,.12), transparent 50%),var(--bg)}
+        h1{margin:0 0 14px}
+        h2{margin:18px 0 10px}
+        section{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+            border:1px solid var(--border);border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+        .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+        button{cursor:pointer;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0e1730;color:var(--text)}
+        button:hover{background:#152043}
+        input[type="text"]{background:#0b1426;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+        pre.out{white-space:pre-wrap;background:#0b1426;border:1px dashed var(--border);border-radius:12px;padding:10px;min-height:46px}
+        .error{border:2px solid red}
+        .valid{border:2px solid #22c55e}
+        .highlight{outline:2px solid var(--warn);background:#201600}
+        ul.demo{height:200px;overflow:auto;border:1px solid var(--border);border-radius:12px;padding:8px;background:#0b1426}
+        .card{background:#0b1426;border:1px solid var(--border);border-radius:12px;padding:12px}
+    </style>
+</head>
+<body>
+<h1>Практическое занятие №6 — DOM (стили, размеры, прокрутка)</h1>
+
+<!-- 1.1 -->
+<section>
+    <h2>1.1 Поиск элемента и изменение содержимого</h2>
+    <div id="msg" class="card">Старое сообщение</div>
+    <div class="row">
+        <button onclick="updateMessage('msg','Новое сообщение!')">Текст без HTML</button>
+        <button onclick="updateMessage('msg','<strong>Новое сообщение!</strong>')">С HTML &lt;strong&gt;</button>
+        <button onclick="clearOut('out_11')">Очистить вывод</button>
+    </div>
+    <pre id="out_11" class="out"></pre>
+</section>
+
+<!-- 1.2 -->
+<section>
+    <h2>1.2 Перемещение по DOM-дереву</h2>
+    <ul class="card" style="list-style:disc;padding-left:22px">
+        <li id="tgt">Элемент 1</li>
+        <li>Элемент 2</li>
+    </ul>
+    <div class="row">
+        <button onclick="highlightSibling('tgt')">Выделить соседа</button>
+        <button onclick="clearOut('out_12')">Очистить вывод</button>
+    </div>
+    <pre id="out_12" class="out"></pre>
+</section>
+
+<!-- 1.3 -->
+<section>
+    <h2>1.3 Список детей элемента</h2>
+    <ul id="list13" class="card">
+        <li>Элемент 1</li><li>Элемент 2</li><li>Элемент 3</li>
+    </ul>
+    <div class="row">
+        <button onclick="listChildren('#list13')">Показать children</button>
+        <button onclick="clearOut('out_13')">Очистить вывод</button>
+    </div>
+    <pre id="out_13" class="out"></pre>
+</section>
+
+<!-- 2.1 -->
+<section>
+    <h2>2.1 Очистка списка</h2>
+    <ol id="elem21" class="card"><li>Привет</li><li>Мир</li></ol>
+    <div class="row">
+        <button onclick="clearElem(document.getElementById('elem21'))">Очистить</button>
+        <button onclick="clearOut('out_21')">Очистить вывод</button>
+    </div>
+    <pre id="out_21" class="out"></pre>
+</section>
+
+<!-- 2.2 -->
+<section>
+    <h2>2.2 Добавление поля формы</h2>
+    <form id="myForm22" class="card" onsubmit="return false;">
+        <input type="text" value="Поле 1">
+    </form>
+    <div class="row">
+        <button onclick="addInput('myForm22')">Добавить input</button>
+        <button onclick="clearOut('out_22')">Очистить вывод</button>
+    </div>
+    <pre id="out_22" class="out"></pre>
+</section>
+
+<!-- 2.3 -->
+<section>
+    <h2>2.3 Клонирование и замена</h2>
+    <div id="box23" class="card">Оригинал</div>
+    <div class="row">
+        <button onclick="cloneAndReplace('box23')">Клонировать и заменить</button>
+        <button onclick="clearOut('out_23')">Очистить вывод</button>
+    </div>
+    <pre id="out_23" class="out"></pre>
+</section>
+
+<!-- 3.1 -->
+<section>
+    <h2>3.1 Подсветка ошибки</h2>
+    <input id="input31" class="card" value="Текст" />
+    <div class="row">
+        <button onclick="highlightError('input31')">Добавить .error</button>
+        <button onclick="clearOut('out_31')">Очистить вывод</button>
+    </div>
+    <pre id="out_31" class="out"></pre>
+</section>
+
+<!-- 3.2 -->
+<section>
+    <h2>3.2 Переключение стиля</h2>
+    <input id="input32" class="card" value="Текст" />
+    <div class="row">
+        <button onclick="toggleValid('input32')">toggle .valid</button>
+        <button onclick="clearOut('out_32')">Очистить вывод</button>
+    </div>
+    <pre id="out_32" class="out"></pre>
+</section>
+
+<!-- 3.3 -->
+<section>
+    <h2>3.3 Динамическая ширина поля</h2>
+    <style>#input33{width:100px}</style>
+    <input id="input33" class="card" value="Текст" />
+    <div class="row">
+        <button onclick="adjustWidth('input33')">+50px к ширине</button>
+        <button onclick="clearOut('out_33')">Очистить вывод</button>
+    </div>
+    <pre id="out_33" class="out"></pre>
+</section>
+
+<!-- 4.1 -->
+<section>
+    <h2>4.1 Проверка видимости</h2>
+    <div id="box41" class="card" style="display:none">Скрытый</div>
+    <div class="row">
+        <button onclick="outTo('out_41', 'hidden =', String(isHidden('box41')))">isHidden()</button>
+        <button onclick="clearOut('out_41')">Очистить вывод</button>
+    </div>
+    <pre id="out_41" class="out"></pre>
+</section>
+
+<!-- 4.2 -->
+<section>
+    <h2>4.2 Расширение элемента</h2>
+    <div id="box42" class="card" style="height:100px;overflow:auto">
+        Длинный текст… Длинный текст… Длинный текст… Длинный текст… Длинный текст… Длинный текст…
+    </div>
+    <div class="row">
+        <button onclick="expandElement('box42')">Высота = scrollHeight</button>
+        <button onclick="clearOut('out_42')">Очистить вывод</button>
+    </div>
+    <pre id="out_42" class="out"></pre>
+</section>
+
+<!-- 4.3 -->
+<section>
+    <h2>4.3 Прокрутка к концу элемента</h2>
+    <div id="box43" class="card" style="height:100px;overflow:auto">
+        <div style="height:400px">Очень длинный контент</div>
+    </div>
+    <div class="row">
+        <button onclick="scrollToBottom('box43')">Прокрутить вниз</button>
+        <button onclick="clearOut('out_43')">Очистить вывод</button>
+    </div>
+    <pre id="out_43" class="out"></pre>
+</section>
+
+<!-- 5.1 -->
+<section>
+    <h2>5.1 Отображение размеров окна</h2>
+    <div class="row">
+        <button onclick="showWindowSize()">Показать размеры</button>
+        <button onclick="clearOut('out_51')">Очистить вывод</button>
+    </div>
+    <pre id="out_51" class="out"></pre>
+</section>
+
+<!-- 5.2 -->
+<section>
+    <h2>5.2 Плавная прокрутка вниз на 500px</h2>
+    <div style="height:400px" class="card">Запас высоты для демонстрации</div>
+    <div class="row">
+        <button onclick="smoothScrollDown()">Прокрутить вниз (500px)</button>
+    </div>
+</section>
+
+<!-- 5.3 -->
+<section>
+    <h2>5.3 Прокрутка к элементу</h2>
+    <div style="height:600px" class="card">Верх</div>
+    <div id="target53" class="card">Цель</div>
+    <div style="height:600px" class="card">Низ</div>
+    <div class="row">
+        <button onclick="scrollToElement('target53')">Прокрутить к «Цели»</button>
+    </div>
+</section>
+
+<!-- 6 -->
+<section>
+    <h2>6* Динамическая форма с валидацией</h2>
+    <form id="form6" class="card" onsubmit="return false;" style="max-width:100%;padding:12px">
+        <input type="text" placeholder="Введите текст и жмите «Добавить»">
+        <button type="button" onclick="addField()">Добавить</button>
+    </form>
+    <small class="muted">Правило: пустая строка → .error, непустая → .valid. Если ширина содержимого &gt; 500px — overflow:auto.</small>
+</section>
+
+<!-- 7 -->
+<section>
+    <h2>7* Прокручиваемый список с подсветкой</h2>
+    <ul id="list7" class="demo">
+        <li>Элемент 1</li><li>Элемент 2</li><li>Элемент 3</li><li>Элемент 4</li><li>Элемент 5</li>
+        <li>Элемент 6</li><li>Элемент 7</li><li>Элемент 8</li><li>Элемент 9</li><li>Элемент 10</li>
+    </ul>
+</section>
+
+<!-- 8 -->
+<section>
+    <h2>8* Адаптивная форма с динамической шириной</h2>
+    <form id="myForm8" class="card" style="width:400px;border:1px solid #000">
+        <input id="input8" type="text" style="width:200px">
+        <button type="button" onclick="adaptWidth()">Адаптировать</button>
+    </form>
+</section>
+
+<script src="pr6_all.js"></script>
+</body>
+</html>

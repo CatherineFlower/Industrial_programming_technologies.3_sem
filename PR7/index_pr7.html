@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>ПР-7 — События, делегирование, всплытие</title>
+    <style>
+        :root{--bg:#0b1220;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--border:#1f2a44;--accent:#60a5fa;--warn:#f59e0b;--ok:#10b981}
+        *{box-sizing:border-box}
+        body{margin:24px;font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--text);
+            background:radial-gradient(1000px 700px at 10% -10%, rgba(96,165,250,.12), transparent 50%),var(--bg)}
+        h1{margin:0 0 14px} h2{margin:18px 0 10px}
+        section{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+            border:1px solid var(--border);border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+        .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+        button,input[type=button]{cursor:pointer;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0e1730;color:var(--text)}
+        button:hover,input[type=button]:hover{background:#152043}
+        .card{background:#0b1426;border:1px solid var(--border);border-radius:12px;padding:12px}
+        .hidden{display:none}
+        .highlight{background:yellow;color:#111}
+        ul.menu{list-style:disc;padding-left:22px}
+        /* Задание 3 – сообщения */
+        .pane{position:relative;margin:10px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:#0b1426}
+        .pane .close{position:absolute;top:6px;right:8px;border:none;background:transparent;color:#fff;opacity:.7;cursor:pointer;font-size:16px}
+        .pane .close:hover{opacity:1}
+        /* Задание 4 – дерево */
+        #tree{user-select:none}
+        #tree li{cursor:pointer;padding:3px 4px}
+        #tree li ul{display:none;margin-left:18px}
+        #tree li.open>ul{display:block}
+        /* Задание 4.2 – таблица */
+        table{border-collapse:collapse}
+        th,td{border:1px solid var(--border);padding:6px 8px}
+        th{cursor:pointer}
+        th:hover{background:#16223f}
+        /* Подсказка (4.3) */
+        .tooltip{position:fixed;padding:10px 12px;border:1px solid #b3c9ce;border-radius:8px;background:#fff;color:#222;
+            box-shadow:3px 3px 3px rgba(0,0,0,.3);z-index:10000;max-width:60vw}
+        small.note{color:var(--muted)}
+    </style>
+</head>
+<body>
+<h1>Практическая №7 — обработка событий</h1>
+
+<!-- 1.1 -->
+<section id="t11">
+    <h2>1.1 Скрыть элемент по нажатию</h2>
+    <input type="button" id="hider" value="Нажмите, чтобы спрятать текст">
+    <div id="text" class="card" style="margin-top:8px">Текст, который нужно скрыть</div>
+</section>
+
+<!-- 1.2 -->
+<section id="t12">
+    <h2>1.2 Спрятать себя</h2>
+    <input type="button" id="selfHider" value="Спрятать себя">
+</section>
+
+<!-- 1.3 -->
+<section id="t13">
+    <h2>1.3 Три обработчика через addEventListener</h2>
+    <button id="btn3">Кнопка с обработчиками</button>
+    <small class="note">Сработают в порядке добавления: alert → класс → alert.</small>
+</section>
+
+<!-- 2.1 -->
+<section id="t21">
+    <h2>2.1 Раскрывающееся меню</h2>
+    <div class="card" id="sweets">
+        <div id="menuToggle" style="cursor:pointer">▶ Сладости (нажми меня)!</div>
+        <ul class="menu" id="menuList">
+            <li>Пирожное</li><li>Пончик</li><li>Мёд</li>
+        </ul>
+    </div>
+</section>
+
+<!-- 2.2 -->
+<section id="t22">
+    <h2>2.2 Объект события и координаты</h2>
+    <p>Кликните в любом месте страницы; смотрите консоль (F12).</p>
+    <button>Тестовая кнопка</button>
+</section>
+
+<!-- 2.3 -->
+<section id="t23">
+    <h2>2.3 Обработчик с существующей функцией</h2>
+    <button id="btn4">Тест</button>
+</section>
+
+<!-- 3 -->
+<section id="t3">
+    <h2>3 Добавить кнопку закрытия для сообщений</h2>
+    <div>
+        <div class="pane">
+            <button class="close" aria-label="Закрыть">×</button>
+            <h3>Лошадь</h3>
+            <p>Домашняя лошадь — животное семейства непарнокопытных…</p>
+        </div>
+        <div class="pane">
+            <button class="close" aria-label="Закрыть">×</button>
+            <h3>Осёл</h3>
+            <p>Домашний осёл… сыгравший важную историческую роль…</p>
+        </div>
+        <div class="pane">
+            <button class="close" aria-label="Закрыть">×</button>
+            <h3>Кошка</h3>
+            <p>Кошка — одно из наиболее популярных домашних животных…</p>
+        </div>
+    </div>
+</section>
+
+<!-- 4 -->
+<section id="t4">
+    <h2>4 Раскрывающееся дерево (одно делегирование)</h2>
+    <ul id="tree" class="card">
+        <li>Животные
+            <ul>
+                <li>Млекопитающие
+                    <ul><li>Коровы</li><li>Ослы</li><li>Собаки</li><li>Тигры</li></ul>
+                </li>
+                <li>Другие
+                    <ul><li>Змеи</li><li>Птицы</li><li>Ящерицы</li></ul>
+                </li>
+            </ul>
+        </li>
+        <li>Рыбы
+            <ul>
+                <li>Аквариумные <ul><li>Гуппи</li><li>Скалярии</li></ul></li>
+                <li>Морские <ul><li>Морская форель</li></ul></li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<!-- 4.2 -->
+<section id="t42">
+    <h2>4.2 Сортируемая таблица</h2>
+    <table id="grid">
+        <thead>
+        <tr>
+            <th data-type="number">Возраст</th>
+            <th data-type="string">Имя</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>5</td><td>Вася</td></tr>
+        <tr><td>2</td><td>Петя</td></tr>
+        <tr><td>12</td><td>Женя</td></tr>
+        <tr><td>9</td><td>Маша</td></tr>
+        <tr><td>1</td><td>Илья</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- 4.3 -->
+<section id="t43">
+    <h2>4.3 Поведение «подсказка» (делегирование)</h2>
+    <p>Наведите на элементы ниже:</p>
+    <button data-tooltip="эта подсказка длиннее, чем элемент">Короткая кнопка</button>
+    <button data-tooltip="HTML<br>подсказка">Ещё кнопка</button>
+    <p style="height:600px" class="card">Прокрутите страницу и снова проверьте подсказки у верхнего края.</p>
+</section>
+
+<!-- 5.1 / 5.2 -->
+<section id="t51">
+    <h2>5.1 Всплытие / 5.2 Остановка всплытия</h2>
+    <div id="parent" class="card" style="padding:16px;border:2px solid #2563eb">
+        <button id="child">Кликни меня</button>
+    </div>
+    <small class="note">Сначала обработчик кнопки, потом родителя; затем включается stopPropagation у кнопки.</small>
+</section>
+
+<!-- 6 -->
+<section id="t6">
+    <h2>6 «Поведение» счётчиков (делегирование)</h2>
+    <div id="counters" class="row">
+        <button data-counter value="0">Счётчик 1</button>
+        <button data-counter value="1">Счётчик 2</button>
+    </div>
+</section>
+
+<!-- 7 -->
+<section id="t7">
+    <h2>7 Data-атрибуты для меню</h2>
+    <div id="menu" class="row">
+        <button data-action="save">Сохранить</button>
+        <button data-action="load">Загрузить</button>
+        <button data-action="delete">Удалить</button>
+    </div>
+</section>
+
+<script src="pr7_all.js"></script>
+</body>
+</html>

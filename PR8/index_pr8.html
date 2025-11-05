@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>ПР-8 — Декораторы, аксессоры, прототипы</title>
+    <style>
+        :root{--bg:#0b1220;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--border:#1f2a44}
+        *{box-sizing:border-box}
+        body{margin:24px;font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--text);
+            background:radial-gradient(1000px 700px at 10% -10%, rgba(96,165,250,.12), transparent 50%),var(--bg)}
+        h1{margin:0 0 14px} h2{margin:18px 0 10px}
+        section{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+            border:1px solid var(--border);border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+        .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+        button{cursor:pointer;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0e1730;color:var(--text)}
+        button:hover{background:#152043}
+        pre.out{white-space:pre-wrap;background:#0b1426;border:1px dashed var(--border);border-radius:12px;padding:10px;min-height:48px}
+        small.note{color:var(--muted)}
+        code{background:#0b1426;padding:2px 6px;border-radius:6px;border:1px solid var(--border)}
+    </style>
+</head>
+<body>
+<h1>Практическая №8 — декораторы, аксессоры, прототипы</h1>
+<small class="note">Нажимай кнопки — результат появится под каждой задачей. Некоторые задания показывают alert по условиям методички.</small>
+
+<!-- 1.1 -->
+<section>
+    <h2>1.1 Прозрачное кэширование</h2>
+    <div class="row">
+        <button onclick="demo_11()">Запустить демо</button>
+        <button onclick="clearOut('out_11')">Очистить вывод</button>
+    </div>
+    <pre id="out_11" class="out"></pre>
+</section>
+
+<!-- 1.2 -->
+<section>
+    <h2>1.2 Кэширование с контекстом и несколькими аргументами</h2>
+    <div class="row">
+        <button onclick="demo_12()">Запустить демо</button>
+        <button onclick="clearOut('out_12')">Очистить вывод</button>
+    </div>
+    <pre id="out_12" class="out"></pre>
+</section>
+
+<!-- 1.3 -->
+<section>
+    <h2>1.3 Декоратор-шпион</h2>
+    <div class="row">
+        <button onclick="demo_13()">Запустить демо</button>
+        <button onclick="clearOut('out_13')">Очистить вывод</button>
+    </div>
+    <pre id="out_13" class="out"></pre>
+</section>
+
+<!-- 1.4 -->
+<section>
+    <h2>1.4* Задерживающий декоратор</h2>
+    <div class="row">
+        <button onclick="demo_14()">Показать задержки 1000/1500 мс</button>
+        <button onclick="clearOut('out_14')">Очистить вывод</button>
+    </div>
+    <pre id="out_14" class="out"></pre>
+</section>
+
+<!-- 2.1 -->
+<section>
+    <h2>2.1 Геттер для полного имени</h2>
+    <div class="row">
+        <button onclick="demo_21()">Показать fullName</button>
+        <button onclick="clearOut('out_21')">Очистить вывод</button>
+    </div>
+    <pre id="out_21" class="out"></pre>
+</section>
+
+<!-- 2.2 -->
+<section>
+    <h2>2.2 Сеттер с валидацией</h2>
+    <div class="row">
+        <button onclick="demo_22()">Валидировать name (короче 4 — ошибка)</button>
+        <button onclick="clearOut('out_22')">Очистить вывод</button>
+    </div>
+    <pre id="out_22" class="out"></pre>
+</section>
+
+<!-- 2.3 -->
+<section>
+    <h2>2.3 Геттер возраста от даты рождения</h2>
+    <div class="row">
+        <button onclick="demo_23()">Показать возраст</button>
+        <button onclick="clearOut('out_23')">Очистить вывод</button>
+    </div>
+    <pre id="out_23" class="out"></pre>
+</section>
+
+<!-- 2.4 -->
+<section>
+    <h2>2.4* Умный аксессор с кэшированием</h2>
+    <div class="row">
+        <button onclick="demo_24()">Проверить кэш age и сброс при смене birthday</button>
+        <button onclick="clearOut('out_24')">Очистить вывод</button>
+    </div>
+    <pre id="out_24" class="out"></pre>
+</section>
+
+<!-- 3.1 -->
+<section>
+    <h2>3.1 Работа с прототипами — jumps</h2>
+    <div class="row">
+        <button onclick="demo_31()">Запустить демо</button>
+        <button onclick="clearOut('out_31')">Очистить вывод</button>
+    </div>
+    <pre id="out_31" class="out"></pre>
+</section>
+
+<!-- 3.2 -->
+<section>
+    <h2>3.2 Куда будет произведена запись?</h2>
+    <div class="row">
+        <button onclick="demo_32()">Запустить демо</button>
+        <button onclick="clearOut('out_32')">Очистить вывод</button>
+    </div>
+    <pre id="out_32" class="out"></pre>
+</section>
+
+<!-- 3.3 -->
+<section>
+    <h2>3.3 Алгоритм поиска по цепочке прототипов</h2>
+    <div class="row">
+        <button onclick="demo_33()">Построить цепочку и проверить</button>
+        <button onclick="clearOut('out_33')">Очистить вывод</button>
+    </div>
+    <pre id="out_33" class="out"></pre>
+</section>
+
+<!-- 3.4 -->
+<section>
+    <h2>3.4* Почему наедаются оба хомяка? Исправление</h2>
+    <div class="row">
+        <button onclick="demo_34()">Показать проблему и фикс</button>
+        <button onclick="clearOut('out_34')">Очистить вывод</button>
+    </div>
+    <pre id="out_34" class="out"></pre>
+</section>
+
+<script src="pr8_all.js"></script>
+</body>
+</html>
