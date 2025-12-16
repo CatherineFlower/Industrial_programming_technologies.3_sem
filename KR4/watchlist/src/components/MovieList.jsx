@@ -25,15 +25,19 @@ export default function MovieList(){
 
   return (
     <>
-      <Filters onChange={setFlt}/>
-      <div className="row">
-        <button onClick={()=>dispatch({type:'BULK_LOAD', items:samples})}>Загрузить примеры</button>
-        <button className="danger" onClick={()=>dispatch({type:'BULK_LOAD', items:[]})}>Очистить всё</button>
-      </div>
-      <div className="list">
-        {filtered.map(m => <MovieItem key={m.id} movie={m}/>)}
-        {filtered.length===0 && <div className="card">Ничего не найдено</div>}
-      </div>
+        <Filters onChange={setFlt} />
+
+        <section className="stats">
+            <div className="actions">
+                <button onClick={() => dispatch({ type: 'BULK_LOAD', items: samples })}>Загрузить примеры</button>
+                <button className="danger" onClick={() => dispatch({ type: 'BULK_LOAD', items: [] })}>Очистить всё</button>
+            </div>
+        </section>
+
+        <section className="movie-list">
+            {filtered.map(m => <MovieItem key={m.id} movie={m}/>)}
+            {filtered.length === 0 && <div className="card">Ничего не найдено</div>}
+        </section>
     </>
   )
 }

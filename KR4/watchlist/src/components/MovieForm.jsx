@@ -22,17 +22,19 @@ export default function MovieForm(){
   }
 
   return (
-    <form onSubmit={submit} className="card" aria-label="add-movie-form">
-      <h3>Добавить фильм</h3>
+      <section className="panel panel-glass add-panel">
+          <h2>Добавить фильм</h2>
+    <form onSubmit={submit} className="movie-form" aria-label="add-movie-form">
       <div className="row">
         <input placeholder="Название *" value={title} onChange={e=>setTitle(e.target.value)} required/>
         <input placeholder="Год" type="number" min="1888" value={year} onChange={e=>setYear(e.target.value)}/>
         <input placeholder="Жанры (через запятую)" value={genres} onChange={e=>setGenres(e.target.value)}/>
       </div>
-      <div className="row">
         <textarea placeholder="Заметка" rows={2} value={note} onChange={e=>setNote(e.target.value)} style={{flex:1}}/>
+      <div className="actions">
         <button className="primary" type="submit">Добавить</button>
       </div>
     </form>
+      </section>
   )
 }

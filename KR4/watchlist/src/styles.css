@@ -20,3 +20,212 @@ button.danger{ border-color:#ef4444; color:#fecaca }
 .item-footer{ display:flex; justify-content:space-between; align-items:center; gap:6px; margin-top:8px }
 small.muted{ color:var(--muted) }
 @media (max-width:480px){ .row> * { flex:1 1 100% } }
+/* === Отступы секций === */
+.movie-form,
+.filters,
+.stats,
+.movie-list {
+    margin-top: 24px;            /* общий верхний отступ для блоков */
+}
+
+/* === ФОРМА "Добавить фильм" === */
+.movie-form {
+    display: grid;
+    gap: 16px;                   /* вертикальный промежуток внутри формы */
+    padding: 24px;
+}
+
+.movie-form .row {
+    display: grid;
+    grid-template-columns: 1fr 220px 1fr; /* Название | Год | Жанры */
+    gap: 16px;                             /* горизонтальные отступы между полями */
+}
+
+/* больше воздуха вокруг поля "Заметка" */
+.movie-form textarea {
+    min-height: 120px;
+    margin-top: 12px;            /* отступ над заметкой */
+    margin-bottom: 12px;         /* отступ под заметкой */
+}
+
+/* отступ над кнопкой "Добавить" */
+.movie-form .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* === ФИЛЬТРЫ и КНОПКИ СТАТИСТИКИ === */
+/* Развести фильтры и "Загрузить примеры / Очистить всё" */
+.filters {
+    padding: 16px 20px;
+}
+
+.stats {
+    margin-top: 20px;            /* отступ от фильтров до блока с кнопками */
+}
+
+/* Разнести сами кнопки "Загрузить примеры" и "Очистить всё" */
+.stats .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;                   /* расстояние между кнопками */
+    margin-top: 8px;
+}
+
+/* Для версток без явных классов — мягкое страховочное правило:
+   любой блок сразу после другого блока получает отступ сверху */
+.block + .block { margin-top: 24px; }
+
+/* Карточки/панели */
+.panel {
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.35);
+}
+
+.panel-glass { backdrop-filter: blur(6px); }
+.add-panel { margin-top: 16px; }
+
+.panel > h2 { margin: 0 0 16px; }
+
+/* Форма */
+.movie-form { display: grid; gap: 16px; }
+.movie-form .row {
+    display: grid;
+    grid-template-columns: 1fr 220px 1fr;
+    gap: 16px;
+}
+.movie-form textarea {
+    min-height: 140px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.movie-form .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Развести фильтры и блок с кнопками */
+.filters    { margin-top: 24px; }
+.stats      { margin-top: 20px; }
+.stats .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+/* Контейнер списка фильмов: вертикальная колонка с зазором */
+.movie-list,
+.list {
+    display: flex;              /* или display: grid */
+    flex-direction: column;     /* для flex-колонки */
+    gap: 20px;                  /* ВОТ ЭТО разводит карточки */
+}
+
+/* на мобильных чуть меньше */
+@media (max-width: 600px) {
+    .movie-list, .list { gap: 14px; }
+}
+
+/* ====== Форма редактирования карточки ====== */
+.edit-form {
+    display: grid;
+    gap: 16px;               /* вертикальные отступы между блоками формы */
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+}
+
+.edit-form .row {
+    display: grid;
+    grid-template-columns: 1.2fr 200px 1.2fr; /* Название | Год | Жанры */
+    gap: 16px;                                /* горизонтальные отступы */
+}
+
+.field {
+    display: flex;
+    flex-direction: column;  /* подпись над полем */
+    gap: 8px;                /* отступ между подписью и инпутом */
+}
+
+.field-label {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.edit-form input,
+.edit-form textarea {
+    padding: 12px 14px;
+    border-radius: 12px;
+}
+
+.edit-form textarea { min-height: 120px; }
+
+.edit-form .actions {
+    display: flex;
+    gap: 12px;               /* расстояние между кнопками */
+    justify-content: flex-start;
+    margin-top: 4px;         /* отступ над кнопками */
+}
+
+/* адаптив: в узких экранах поля в столбик */
+@media (max-width: 800px) {
+    .edit-form .row {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ====== Карточка ====== */
+.card {
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+/* заголовок */
+.card-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    margin-bottom: 6px;
+}
+
+/* подзаголовок/жанры/заметка */
+.card-sub {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+}
+
+/* блок кнопок — как раньше: разделитель и «воздух» */
+.card .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+    margin-top: 8px;
+}
+
+/* расстояние между карточками (если ты не используешь gap у контейнера) */
+.card + .card { margin-top: 18px; }
+
+/* бейджи статуса, если используешь */
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+.badge.ok   { background: rgba(38, 201, 142, .18); border: 1px solid rgba(38,201,142,.45); }
+.badge.warn { background: rgba(255, 193, 7, .14);  border: 1px solid rgba(255,193,7,.42); }

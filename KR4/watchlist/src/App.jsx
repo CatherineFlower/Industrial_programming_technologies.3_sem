@@ -7,7 +7,7 @@ import Stats from './components/Stats.jsx'
 export default function App(){
   return (
     <div className="container">
-      <h1>Watchlist — список фильмов</h1>
+      <h1>Список фильмов — хочу посмотреть / посмотрено</h1>
       <MoviesProvider>
         <Stats/>
         <MovieForm/>
