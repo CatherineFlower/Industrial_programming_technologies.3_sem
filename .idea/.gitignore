@@ -6,6 +6,3 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-#.sh files
-/KR4/setup_watchlist.sh
-/setup_watchlist.sh
