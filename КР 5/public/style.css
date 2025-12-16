@@ -1,0 +1,11 @@
+:root{color-scheme:dark light;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:#0e1621;color:#e7eef7}
+.container{max-width:880px;margin:40px auto;padding:0 16px}
+h1{margin:0 0 16px}
+.panel{background:#111a27;border:1px solid #223146;border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:12px;align-items:end}
+label{display:flex;flex-direction:column;font-size:14px;gap:6px}
+input{background:#0b1220;border:1px solid #2c3b50;border-radius:10px;color:#e7eef7;padding:10px 12px}
+button{background:#1f6feb;border:1px solid #2c74f7;padding:10px 14px;border-radius:12px;color:#fff;cursor:pointer}
+pre{white-space:pre-wrap;background:#0b1220;border:1px solid #2c3b50;border-radius:10px;padding:12px}
+footer{opacity:.7;margin-top:24px}

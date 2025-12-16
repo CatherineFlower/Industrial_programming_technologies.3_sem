@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Калькулятор ИМТ (Express API)</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Калькулятор ИМТ</h1>
+    <section class="panel">
+      <h2>Форма</h2>
+      <form id="bmiForm">
+        <label>Вес (кг)
+          <input type="number" step="0.1" name="weight" required placeholder="70">
+        </label>
+        <label>Рост (см или м)
+          <input type="number" step="0.01" name="height" required placeholder="170">
+        </label>
+        <button type="submit">Рассчитать (POST)</button>
+        <button id="btnGet" type="button">Рассчитать (GET)</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>Результат</h2>
+      <pre id="result">—</pre>
+    </section>
+    <footer>API: <code>/api/bmi/calc</code>, <code>/api/bmi/info</code></footer>
+  </main>
+  <script>
+  const form = document.getElementById('bmiForm');
+  const resBox = document.getElementById('result');
+  const btnGet = document.getElementById('btnGet');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const body = Object.fromEntries(fd.entries());
+    const r = await fetch('/api/bmi/calc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    resBox.textContent = JSON.stringify(await r.json(), null, 2);
+  });
+  btnGet.addEventListener('click', async () => {
+    const fd = new FormData(form);
+    const weight = fd.get('weight'); const height = fd.get('height');
+    const r = await fetch(`/api/bmi/calc?weight=${weight}&height=${height}`);
+    resBox.textContent = JSON.stringify(await r.json(), null, 2);
+  });
+  </script>
+</body>
+</html>

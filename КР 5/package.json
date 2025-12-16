@@ -1,0 +1,17 @@
+{
+  "name": "kr5-bmi-express",
+  "version": "1.0.0",
+  "description": "Контрольная работа №5 — Express.js: Калькулятор ИМТ (BMI)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --env-file=.env src/server.js",
+    "start": "NODE_ENV=production node src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "cors": "^2.8.5"
+  }
+}
