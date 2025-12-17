@@ -7,10 +7,10 @@
 // • Геттер perimeter возвращает периметр: 4 * side.
 
 class Square {
-  #side = 0; // приватное свойство
+  #side = 0;
 
   constructor(side = 0) {
-    this.side = side; // используем сеттер, чтобы сработала валидация
+    this.side = side;
   }
 
   get side() {
@@ -25,12 +25,10 @@ class Square {
     this.#side = num;
   }
 
-  // Площадь: s^2
   get area() {
     return this.#side ** 2;
   }
 
-  // Периметр: 4 * s
   get perimeter() {
     return 4 * this.#side;
   }
